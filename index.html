@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Universe</title>
+  <meta name="description" content="An interactive 3D library of books, drifting through space." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700&family=Manrope:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!--
+    Import map for ES modules. Pinning specific versions guarantees deterministic
+    builds on GitHub Pages. Three.js is loaded from unpkg (which respects the
+    package's "module" entry); GSAP and js-yaml come from esm.sh (which always
+    serves valid ESM regardless of the upstream packaging).
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/[email protected]/build/three.module.js",
+        "three/addons/": "https://unpkg.com/[email protected]/examples/jsm/",
+        "gsap": "https://esm.sh/[email protected]",
+        "js-yaml": "https://esm.sh/[email protected]"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- 3D canvas mounts here -->
+  <div id="stage" aria-label="3D book universe"></div>
+
+  <!-- Decorative starfield drawn in CSS, behind everything -->
+  <div class="stars" aria-hidden="true"></div>
+
+  <!-- Loading screen, removed once books are ready -->
+  <div id="loader" class="loader" role="status" aria-live="polite">
+    <div class="loader__orbit"><span></span><span></span><span></span></div>
+    <p class="loader__text">Charting the library<span class="dots"></span></p>
+  </div>
+
+  <!-- Top-left header -->
+  <header class="hud hud--top-left">
+    <h1 class="hud__title">
+      <span class="hud__title-mark">✦</span>
+      Book&nbsp;Universe
+    </h1>
+    <p class="hud__subtitle">A drifting library — drag to orbit, scroll to zoom, click a cover.</p>
+  </header>
+
+  <!-- Top-right book counter -->
+  <div class="hud hud--top-right">
+    <div class="counter">
+      <span class="counter__value" id="book-count">—</span>
+      <span class="counter__label">volumes</span>
+    </div>
+  </div>
+
+  <!-- Bottom layout switcher -->
+  <nav class="hud hud--bottom" aria-label="Layout modes">
+    <div class="modes">
+      <button class="mode is-active" data-mode="drift">
+        <span class="mode__icon">✺</span>
+        <span class="mode__label">Drift</span>
+      </button>
+      <button class="mode" data-mode="genre">
+        <span class="mode__icon">❋</span>
+        <span class="mode__label">Cluster by genre</span>
+      </button>
+      <button class="mode" data-mode="author">
+        <span class="mode__icon">❈</span>
+        <span class="mode__label">Cluster by author</span>
+      </button>
+      <button class="mode" data-mode="year">
+        <span class="mode__icon">⌖</span>
+        <span class="mode__label">Sort by year</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Detail overlay, populated dynamically -->
+  <aside id="overlay" class="overlay" aria-hidden="true">
+    <button class="overlay__close" id="overlay-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 5l14 14M19 5L5 19" />
+      </svg>
+    </button>
+    <div class="overlay__panel">
+      <div class="overlay__cover-wrap">
+        <img class="overlay__cover" id="overlay-cover" alt="" />
+      </div>
+      <div class="overlay__body">
+        <p class="overlay__year" id="overlay-year"></p>
+        <h2 class="overlay__title" id="overlay-title"></h2>
+        <p class="overlay__author" id="overlay-author"></p>
+        <div class="overlay__meta" id="overlay-meta"></div>
+        <div class="overlay__tags" id="overlay-tags"></div>
+        <div class="overlay__description" id="overlay-description"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Hover label that follows the cursor -->
+  <div id="tooltip" class="tooltip" aria-hidden="true">
+    <span class="tooltip__title"></span>
+    <span class="tooltip__author"></span>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
